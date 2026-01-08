@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 시작 페이지</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .current-time {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+        }
+
+        .search-engines {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .engine-btn {
+            padding: 10px 24px;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .engine-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .engine-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 16px 24px;
+            border: 2px solid #e9ecef;
+            border-radius: 50px;
+            font-size: 1.1em;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            padding: 16px 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn:active {
+            transform: scale(0.98);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            font-size: 1.6em;
+            color: #667eea;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .weather-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .weather-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .temperature {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .weather-icon {
+            font-size: 3.5em;
+        }
+
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .detail-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .meal-list {
+            list-style: none;
+        }
+
+        .meal-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: background 0.2s;
+        }
+
+        .meal-item:hover {
+            background: #e9ecef;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+
+        .error {
+            color: #dc3545;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .meal-date {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .current-time {
+                font-size: 1em;
+            }
+
+            .search-container {
+                padding: 20px;
+            }
+
+            .search-engines {
+                gap: 8px;
+            }
+
+            .engine-btn {
+                font-size: 0.9em;
+                padding: 8px 16px;
+            }
+
+            .search-input {
+                font-size: 1em;
+                padding: 14px 20px;
+            }
+
+            .search-btn {
+                padding: 14px 24px;
+            }
+            
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .temperature {
+                font-size: 2em;
+            }
+
+            .weather-icon {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>좋은 하루 되세요! 😊</h1>
+            <div class="current-time" id="currentTime"></div>
+        </div>
+
+        <div class="search-container">
+            <div class="search-engines">
+                <button class="engine-btn active" data-engine="google">Google</button>
+                <button class="engine-btn" data-engine="naver">Naver</button>
+                <button class="engine-btn" data-engine="youtube">YouTube</button>
+            </div>
+            <div class="search-form">
+                <input type="text" id="searchInput" class="search-input" placeholder="검색어를 입력하세요..." autofocus>
+                <button id="searchBtn" class="search-btn">🔍</button>
+            </div>
+        </div>
+
+        <div class="cards">
+            <div class="card">
+                <div class="card-title">
+                    🌤️ 서울 날씨
+                </div>
+                <div id="weatherContent" class="loading">날씨 정보를 불러오는 중...</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    🍚 서울등현초등학교 급식
+                </div>
+                <div id="mealContent" class="loading">급식 정보를 불러오는 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEngine = 'google';
+        
+        const searchEngines = {
+            google: 'https://www.google.com/search?q=',
+            naver: 'https://search.naver.com/search.naver?query=',
+            youtube: 'https://www.youtube.com/results?search_query='
+        };
+
+        document.querySelectorAll('.engine-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.engine-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentEngine = this.dataset.engine;
+                document.getElementById('searchInput').focus();
+            });
+        });
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                const searchUrl = searchEngines[currentEngine] + encodeURIComponent(query);
+                window.location.href = searchUrl;
+            }
+        }
+
+        document.getElementById('searchBtn').addEventListener('click', performSearch);
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        function updateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                weekday: 'long',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('currentTime').textContent = 
+                now.toLocaleDateString('ko-KR', options);
+        }
+        
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        function displayWeather() {
+            const icon = '❄️';
+            const temp = -3;
+            const feelsLike = -7;
+            const humidity = 45;
+            const windSpeed = 3.5;
+            
+            const html = `
+                <div class="weather-info">
+                    <div class="weather-main">
+                        <div class="temperature">${temp}°C</div>
+                        <div class="weather-icon">${icon}</div>
+                    </div>
+                    <div style="font-size: 1.1em; color: #666; margin-top: -10px;">
+                        맑음
+                    </div>
+                    <div class="weather-details">
+                        <div class="detail-item">
+                            <div class="detail-label">체감온도</div>
+                            <div class="detail-value">${feelsLike}°C</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">습도</div>
+                            <div class="detail-value">${humidity}%</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">풍속</div>
+                            <div class="detail-value">${windSpeed} m/s</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">날씨 상태</div>
+                            <div class="detail-value" style="font-size: 0.95em;">쾌적</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('weatherContent').innerHTML = html;
+        }
+
+        function displayMeal() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            
+            const dishes = [
+                '친환경쌀밥',
+                '미역국',
+                '닭갈비',
+                '배추김치',
+                '과일(사과)',
+                '우유'
+            ];
+            
+            const html = `
+                <div class="meal-date">📅 ${year}년 ${month}월 ${day}일</div>
+                <ul class="meal-list">
+                    ${dishes.map(dish => `<li class="meal-item">${dish}</li>`).join('')}
+                </ul>
+            `;
+            document.getElementById('mealContent').innerHTML = html;
+        }
+
+        displayWeather();
+        displayMeal();
+    </script>
+</body>
+</html>
